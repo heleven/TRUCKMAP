@@ -166,20 +166,7 @@ export default {
             // controlStyle: {
             //     position: 'left'
             // },
-            data: [
-              "2018",
-              "2020-01",
-              "2020-02",
-              "2020-03"
-              // {
-              //   value: "2005-01-01",
-              //   tooltip: {
-              //     formatter: "{b} GDP达到一个高度"
-              //   },
-              //   symbol: "diamond",
-              //   symbolSize: 16
-              // },
-            ]
+            data: ["2018", "2020-01", "2020-02", "2020-03"]
           },
           //设置标题文本
           title: {
@@ -227,19 +214,6 @@ export default {
             padding: [5, 10],
             transitionDuration: 0.2
           },
-          // brush: {
-          //   geoIndex: "all",
-          //   brushLink: "all",
-          //   inBrush: {
-          //     opacity: 1,
-          //     symbolSize: 14
-          //   },
-          //   outOfBrush: {
-          //     color: "#000",
-          //     opacity: 0.2
-          //   },
-          //   z: 10
-          // },
           visualMap: {
             min: 0.7,
             max: 2,
