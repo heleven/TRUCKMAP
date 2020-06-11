@@ -372,47 +372,55 @@ export default {
           //   },
           //   z: 10
           // },
-           visualMap: [
+          visualMap: [
             {
-            min: 0,
-            max: 2500000,
-            splitNumber: 5,
-            //top: "middle",
-            left: "right",
-            color: ["#d94e5d", "#eac736", "#50a3ba"],
-            textStyle: {
-              //color: "#d94e5d"
-              color: "#000000",
-              fontSize: "auto"
+              min: 0,
+              max: 2500000,
+              splitNumber: 5,
+              //top: "middle",
+              left: "right",
+              color: ["#d94e5d", "#eac736", "#50a3ba"],
+              textStyle: {
+                //color: "#d94e5d"
+                color: "#000000",
+                fontSize: "auto"
+              },
+              seriesIndex: 1
             },
-            seriesIndex: 1
-          },
-          {
-           pieces: [
-            {min: 200000}, // 不指定 max，表示 max 为无限大（Infinity）。
-            {min: 50000, max: 200000},
-            {min: 30000, max: 50000},
-            {min: 10000, max: 30000},
-            {min: 6000, max: 10000},
-            {min: 4000, max: 6000},
-            {min: 2000, max: 4000},
-            {min: 1000, max: 2000},
+            {
+              pieces: [
+                { min: 200000 }, // 不指定 max，表示 max 为无限大（Infinity）。
+                { min: 50000, max: 200000 },
+                { min: 30000, max: 50000 },
+                { min: 10000, max: 30000 },
+                { min: 6000, max: 10000 },
+                { min: 4000, max: 6000 },
+                { min: 2000, max: 4000 },
+                { min: 1000, max: 2000 },
 
-            
-            {max: 1000}     // 不指定 min，表示 min 为无限大（-Infinity）。
-            ],
-            top: "top",
-            left: "left",
-            color: ["#9900CC","#9966FF","#9999FF","#FFCC99","#CC6699","#FF9999","#FFFF99","#009900","#CCFF99"],
-            textStyle: {
-              //color: "#d94e5d"
-              color: "#000000",
-              fontSize: "auto"
-            },
-            seriesIndex: 0
-          }
+                { max: 1000 } // 不指定 min，表示 min 为无限大（-Infinity）。
+              ],
+              top: "top",
+              left: "left",
+              color: [
+                "#9900CC",
+                "#9966FF",
+                "#9999FF",
+                "#FFCC99",
+                "#CC6699",
+                "#FF9999",
+                "#FFFF99",
+                "#009900",
+                "#CCFF99"
+              ],
+              textStyle: {
+                //color: "#d94e5d"
+                color: "#000000",
+                fontSize: "auto"
+              },
+              seriesIndex: 0
+            }
           ],
-
 
           // legend: {
           //   orient: "vertical",

@@ -8,6 +8,11 @@ export default new Router({
     {
       path: "/",
       name: "bmap",
+      component: () => import("./views/indexMap.vue")
+    },
+    {
+      path: "/BMap",
+      name: "bmap",
       component: () => import("./views/BMap.vue")
     }
   ]

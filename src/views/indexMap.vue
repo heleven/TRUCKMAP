@@ -101,11 +101,8 @@ export default {
           }
         },
 
-     
-
-
-        
         {
+          //TODO: 数据格式不对
           type: "effectScatter",
           coordinateSystem: "bmap",
           name: "pos",
@@ -117,17 +114,16 @@ export default {
           //散点的尺寸，当数据加载完成之后执行回调，通过返回值来设置大小
           symbolSize: val => {
             val[2] = Number(val[2]);
-            console.log("val_2:",val[2]);
             if (val[2] >= 1.6) {
-              return 20;
+              return 50;
             } else if (val[2] >= 1.4) {
-              return val[2] / 16;
+              return 45;
             } else if (val[2] >= 1.2) {
-              return val[2] / 14;
+              return 30;
             } else if (val[2] >= 1.0) {
-              return 10;
+              return 20;
             } else {
-              return 5;
+              return 10;
             }
           },
           showEffectOn: "render", //配置何时显示特效。'render' 绘制完成后显示特效。'emphasis' 高亮（hover）的时候显示特效。
@@ -138,29 +134,22 @@ export default {
               opacity: 0.05 //图形透明度。支持从 0 到 1 的数字，为 0 时不绘制该图形。
             }
           },
-          data: this.truck[this.time_select].rows.map((dataItem, index) => {
-            //console.log("bug", geoCoorddata[dataItem[1].name].concat([dataItem[1].value]))
-            console.log("time_select:", this.region[0][0]["上海"][0]);
-            var sum = 0;
-            for (var val in dataItem) {
-              sum += Number(dataItem[val]);
+          data: this.region[0].map((dataItem, index) => {
+            var cityName = "";
+            for (var name in dataItem) {
+              cityName = name;
             }
-            //console.log("sum: ", sum);
+            var regionIndex = dataItem[cityName][this.time_select];
             return {
-              name: this.truck[this.time_select].ids[index],
+              //name: this.truck[this.time_select].ids[index],
               //dataItem[1].name.concat(":" + [dataItem[1].value]),
+              name: cityName,
               value: geoCoorddata[
                 this.truck[this.time_select].ids[index]
-              ].concat([String(sum)]),
+              ].concat([String(regionIndex)]),
               year: this.time_select
             };
           })
-
-
-
-
-
-
         }
       );
       this.option = {
@@ -252,9 +241,9 @@ export default {
           //   z: 10
           // },
           visualMap: {
-            min: 0,
-            max: 2500000,
-            splitNumber: 5,
+            min: 0.7,
+            max: 2,
+            splitNumber: 6,
             //top: "middle",
             left: "right",
             color: ["#d94e5d", "#eac736", "#50a3ba"],
@@ -293,32 +282,18 @@ export default {
             series: [
               { data: this.datas[0] },
               {
-                // data: this.truck[0].rows.map((dataItem, index) => {
-                //   // var sum = 0;
-                //   // for (var val in dataItem) {
-                //   //   sum += Number(dataItem[val]);
-                //   // }
-                //   var sum = 0;
-                //   sum = this.region[0][0]["上海"][0];
-                //   console.log("sum_2018: ", sum);
-                //   return {
-                //     name: this.truck[0].ids[index],
-                //     //dataItem[1].name.concat(":" + [dataItem[1].value]),
-                //     value: geoCoorddata[this.truck[0].ids[index]].concat([
-                //       String(sum)
-                //     ]),
-                //     year: 0
-                //   };
-                // })
-
-                data: this.region[0].map((dataItem,index) => {
-                  return {
-                    name: this.region[0][index][0],
-                    value: geoCoorddata[this.truck[0].ids[index]].concat([
-                       this.region[0][index][0]])
-
+                data: this.region[0].map((dataItem, index) => {
+                  var cityName = "";
+                  for (var name in dataItem) {
+                    cityName = name;
                   }
-              
+                  var regionIndex = dataItem[cityName][0];
+                  return {
+                    name: cityName,
+                    value: geoCoorddata[this.truck[0].ids[index]].concat([
+                      regionIndex
+                    ])
+                  };
                 })
               }
             ]
@@ -331,32 +306,19 @@ export default {
             series: [
               { data: this.datas[1] },
               {
-                // data: this.truck[1].rows.map((dataItem, index) => {
-                //   var sum = 0;
-                //   for (var val in dataItem) {
-                //     sum += Number(dataItem[val]);
-                //   }
-                //   //console.log("sum: ", sum);
-                //   return {
-                //     name: this.truck[1].ids[index],
-                //     //dataItem[1].name.concat(":" + [dataItem[1].value]),
-                //     value: geoCoorddata[this.truck[1].ids[index]].concat([
-                //       String(sum)
-                //     ]),
-                //     year: 1
-                //   };
-                // })
-
-                data: this.region[0].map((dataItem,index) => {
-                  return {
-                    name: this.region[0][index][1],
-                    value: geoCoorddata[this.truck[0].ids[index]].concat([
-                       this.region[0][index][1]])
-
+                data: this.region[0].map((dataItem, index) => {
+                  var cityName = "";
+                  for (var name in dataItem) {
+                    cityName = name;
                   }
+                  var regionIndex = dataItem[cityName][1];
+                  return {
+                    name: cityName,
+                    value: geoCoorddata[this.truck[0].ids[index]].concat([
+                      regionIndex
+                    ])
+                  };
                 })
-
-
               }
             ]
           },
@@ -368,31 +330,19 @@ export default {
             series: [
               { data: this.datas[2] },
               {
-                // data: this.truck[2].rows.map((dataItem, index) => {
-                //   var sum = 0;
-                //   for (var val in dataItem) {
-                //     sum += Number(dataItem[val]);
-                //   }
-                //   //console.log("sum: ", sum);
-                //   return {
-                //     name: this.truck[2].ids[index],
-                //     //dataItem[1].name.concat(":" + [dataItem[1].value]),
-                //     value: geoCoorddata[this.truck[2].ids[index]].concat([
-                //       String(sum)
-                //     ]),
-                //     year: 2
-                //   };
-                // })
-                data: this.region[0].map((dataItem,index) => {
-                  return {
-                    name: this.region[0][index][2],
-                    value: geoCoorddata[this.truck[0].ids[index]].concat([
-                       this.region[0][index][2]])
-
+                data: this.region[0].map((dataItem, index) => {
+                  var cityName = "";
+                  for (var name in dataItem) {
+                    cityName = name;
                   }
+                  var regionIndex = dataItem[cityName][2];
+                  return {
+                    name: cityName,
+                    value: geoCoorddata[this.truck[0].ids[index]].concat([
+                      regionIndex
+                    ])
+                  };
                 })
-
-                
               }
             ]
           },
@@ -420,13 +370,18 @@ export default {
                 //   };
                 // })
 
-                data: this.region[0].map((dataItem,index) => {
-                  return {
-                    name: this.region[0][index][3],
-                    value: geoCoorddata[this.truck[0].ids[index]].concat([
-                       this.region[0][index][3]])
-
+                data: this.region[0].map((dataItem, index) => {
+                  var cityName = "";
+                  for (var name in dataItem) {
+                    cityName = name;
                   }
+                  var regionIndex = dataItem[cityName][3];
+                  return {
+                    name: cityName,
+                    value: geoCoorddata[this.truck[0].ids[index]].concat([
+                      regionIndex
+                    ])
+                  };
                 })
               }
             ]
@@ -451,58 +406,6 @@ export default {
       // bdMap.disableDoubleClickZoom();
       console.log("BMAP", bdMap.getZoom());
       console.log("center:", bdMap.getCenter());
-
-      //获取地图实例 配置地图
-
-      //添加鼠标点击动作
-      // myChart.on("click", { seriesName: "pos" }, params => {
-      //   console.log("name", params.name);
-      //   //调用action过滤数据
-      //   this.setData([this.time_select, String(params.name)]);
-      //   this.option.options[0].series[0].data = this.datas[0];
-      //   this.option.options[1].series[0].data = this.datas[1];
-      //   this.option.options[2].series[0].data = this.datas[2];
-      //   this.option.options[3].series[0].data = this.datas[3];
-      //   //this.option.series[this.time_select].data = this.datas;
-
-      //   this.option.baseOption.bmap.center = [
-      //     bdMap.getCenter().lng,
-      //     bdMap.getCenter().lat
-      //   ];
-      //   this.option.baseOption.bmap.zoom = bdMap.getZoom();
-      //   myChart.setOption(this.option);
-      // });
-
-      // //切换时间
-      // myChart.on("legendselectchanged", params => {
-      //   this.legend_select = params.name;
-      //   // console.log("time_select:",this.time);
-      //   this.time_select = this.time[this.legend_select];
-      //   this.option.baseOption.series[0].data = this.truck[
-      //     this.time_select
-      //   ].rows.map((dataItem, index) => {
-      //     //console.log("bug", geoCoorddata[dataItem[1].name].concat([dataItem[1].value]))
-      //     console.log("time_select:", this.time_select);
-      //     var sum = 0;
-      //     for (var val in dataItem) {
-      //       sum += Number(dataItem[val]);
-      //     }
-      //     console.log("sum: ", sum);
-      //     return {
-      //       name: this.truck[this.time_select].ids[index],
-      //       //dataItem[1].name.concat(":" + [dataItem[1].value]),
-      //       value: geoCoorddata[this.truck[this.time_select].ids[index]].concat(
-      //         [String(sum)]
-      //       )
-      //     };
-      //   });
-      //   this.option.baseOption.bmap.center = [
-      //     bdMap.getCenter().lng,
-      //     bdMap.getCenter().lat
-      //   ];
-      //   this.option.baseOption.bmap.zoom = bdMap.getZoom();
-      //   myChart.setOption(this.option);
-      // });
 
       //鼠标右键回调
       myChart.on("contextmenu", { seriesName: "pos" }, params => {
