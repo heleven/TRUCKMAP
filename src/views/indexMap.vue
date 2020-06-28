@@ -169,7 +169,7 @@ export default {
             // controlStyle: {
             //     position: 'left'
             // },
-            data: ["2019", "2020-01", "2020-02", "2020-03","2020-04"]
+            data: ["2019", "2020-01", "2020-02", "2020-03", "2020-04"]
           },
           //切换开关
           graphic: [
@@ -295,7 +295,7 @@ export default {
                 );
               } else if (params.componentType == "timeline") {
                 if (params.name == "2019") {
-                  return params.name.concat("月平均数据")
+                  return params.name.concat("月平均数据");
                 } else {
                   return params.name;
                 }

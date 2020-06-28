@@ -542,7 +542,7 @@ export default {
                 { min: 5000, max: 8000 },
                 { min: 3000, max: 5000 },
                 { min: 2000, max: 3000 },
-                {min:  1000, max:  2000},
+                { min: 1000, max: 2000 },
                 { min: 600, max: 1000 },
                 { min: 400, max: 600 },
                 { min: 200, max: 400 },
