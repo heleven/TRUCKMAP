@@ -29,8 +29,8 @@ export default {
   data() {
     return {
       option: [],
-      legend_select: "2018",
-      time: { "2018": 0, "2020.1": 1, "2020.2": 2, "2020.3": 3 },
+      legend_select: "2019",
+      time: { "2019": 0, "2020.1": 1, "2020.2": 2, "2020.3": 3 },
       time_select: 0,
       drawer: false,
       tableData: [
@@ -63,6 +63,9 @@ export default {
   }),
   methods: {
     ...mapActions(["getAllData", "setData"]),
+    switchTo() {
+      this.$router.push("/Map");
+    },
     options() {
       let geoCoorddata = geoCoordData;
       let citys = [];
@@ -72,35 +75,35 @@ export default {
 
       let series = []; //在地图上显示的数据
       series.push(
-        {
-          //////////////////////////////////////////////////////////////////////LINES//////////////////////////////////////////////////////
-          name: "2018",
-          type: "lines",
-          map: "china",
-          coordinateSystem: "bmap",
-          //所有图形的 zlevel 值。zlevel用于 Canvas 分层，
-          // 不同zlevel值的图形会放置在不同的 Canvas 中，Canvas 分层是一种常见的优化手段。我们可以把一些图形变化频繁（例如有动画）的组件设置成一个单独的zlevel。
-          // 需要注意的是过多的 Canvas 会引起内存开销的增大，在手机端上需要谨慎使用以防崩溃。zlevel 大的 Canvas 会放在 zlevel 小的 Canvas 的上面。
-          zlevel: 1,
-          // 线数据集。  从哪个城市to哪个城市
-          data: this.datas[0],
+        // {
+        //   //////////////////////////////////////////////////////////////////////LINES//////////////////////////////////////////////////////
+        //   name: "2019",
+        //   type: "lines",
+        //   map: "china",
+        //   coordinateSystem: "bmap",
+        //   //所有图形的 zlevel 值。zlevel用于 Canvas 分层，
+        //   // 不同zlevel值的图形会放置在不同的 Canvas 中，Canvas 分层是一种常见的优化手段。我们可以把一些图形变化频繁（例如有动画）的组件设置成一个单独的zlevel。
+        //   // 需要注意的是过多的 Canvas 会引起内存开销的增大，在手机端上需要谨慎使用以防崩溃。zlevel 大的 Canvas 会放在 zlevel 小的 Canvas 的上面。
+        //   zlevel: 1,
+        //   // 线数据集。  从哪个城市to哪个城市
+        //   data: this.datas[0],
+        //   show: false,
 
-          //线上面的动态特效
-          effect: {
-            show: true, //是否显示特效。
-            period: 4, //特效动画的时间，单位为 s。
-            trailLength: 0.2, //特效尾迹的长度。取从 0 到 1 的值，数值越大尾迹越长。
-            color: "#fff", //射线颜色
-            symbolSize: [5, 8] //特效标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示高和宽，例如 [20, 10] 表示标记宽为20，高为10。
-          },
-          lineStyle: {
-            //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式。
-            normal: {
-              curveness: 0.3 //边的曲度，支持从 0 到 1 的值，值越大曲度越大。
-            }
-          }
-        },
-
+        //   //线上面的动态特效
+        //   effect: {
+        //     show: true, //是否显示特效。
+        //     period: 4, //特效动画的时间，单位为 s。
+        //     trailLength: 0.2, //特效尾迹的长度。取从 0 到 1 的值，数值越大尾迹越长。
+        //     color: "#fff", //射线颜色
+        //     symbolSize: [5, 8] //特效标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示高和宽，例如 [20, 10] 表示标记宽为20，高为10。
+        //   },
+        //   lineStyle: {
+        //     //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式。
+        //     normal: {
+        //       curveness: 0.3 //边的曲度，支持从 0 到 1 的值，值越大曲度越大。
+        //     }
+        //   }
+        // },
         {
           //TODO: 数据格式不对
           type: "effectScatter",
@@ -119,11 +122,11 @@ export default {
             } else if (val[2] >= 1.4) {
               return 45;
             } else if (val[2] >= 1.2) {
-              return 30;
+              return 35;
             } else if (val[2] >= 1.0) {
-              return 20;
+              return 30;
             } else {
-              return 10;
+              return 25;
             }
           },
           showEffectOn: "render", //配置何时显示特效。'render' 绘制完成后显示特效。'emphasis' 高亮（hover）的时候显示特效。
@@ -166,11 +169,94 @@ export default {
             // controlStyle: {
             //     position: 'left'
             // },
-            data: ["2018", "2020-01", "2020-02", "2020-03"]
+            data: ["2019", "2020-01", "2020-02", "2020-03","2020-04"]
           },
+          //切换开关
+          graphic: [
+            {
+              type: "group",
+              bounding: "raw",
+              left: 60,
+              top: 450,
+              z: 100,
+              onclick: (e, a, b, c) => {
+                console.log("CLICK");
+                this.switchTo();
+              },
+              children: [
+                {
+                  type: "rect",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  onclick: (e, a, b, c) => {
+                    console.log("debug");
+                    this.switchTo();
+                  },
+                  shape: {
+                    width: 114,
+                    height: 32,
+                    r: 3
+                  },
+                  style: {
+                    fill: "#fff",
+                    stroke: "#66b1ff",
+                    lineWidth: 0.5
+                  }
+                },
+                {
+                  type: "text",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  style: {
+                    fill: "#606266",
+                    lineWidth: 0.5,
+                    text: "卡车数量统计"
+                  }
+                }
+              ]
+            },
+            {
+              type: "group",
+              bounding: "raw",
+              left: 60,
+              top: 400,
+              z: 100,
+              children: [
+                {
+                  type: "rect",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  shape: {
+                    width: 114,
+                    height: 32,
+                    r: 3
+                  },
+                  style: {
+                    fill: "#66b1ff",
+                    stroke: "#66b1ff",
+                    lineWidth: 0.5
+                  }
+                },
+                {
+                  type: "text",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  style: {
+                    fill: "#fff",
+                    lineWidth: 0.5,
+                    text: "一体化指标统计"
+                  }
+                }
+              ]
+            }
+          ],
           //设置标题文本
           title: {
-            text: "长三角区域卡车数量统计图",
+            text: "长三角区域城市一体化指标统计图",
             subtext: "浙江大学",
             sublink: "https://www.zju.edu.cn",
             left: "center",
@@ -188,7 +274,7 @@ export default {
             z: 200
           },
           bmap: {
-            center: [118.765995, 30.945765],
+            center: [119.165995, 30.945765],
             zoom: 9,
             roam: true,
             mapStyle: MapStyle,
@@ -207,6 +293,12 @@ export default {
                 return params.name.concat(
                   "->" + params.data.toname + ": " + params.value
                 );
+              } else if (params.componentType == "timeline") {
+                if (params.name == "2019") {
+                  return params.name.concat("月平均数据")
+                } else {
+                  return params.name;
+                }
               } else {
                 return params.name.concat(":" + params.value[2]);
               }
@@ -226,7 +318,7 @@ export default {
               color: "#000000",
               fontSize: "auto"
             },
-            seriesIndex: 1
+            seriesIndex: 0
           },
 
           // legend: {
@@ -250,11 +342,11 @@ export default {
         options: [
           {
             title: {
-              text: "2018 长三角区域卡车数量统计图",
+              text: "2019 长三角区域城市一体化指标统计图",
               subtext: "浙江大学"
             },
             series: [
-              { data: this.datas[0] },
+              // { data: this.datas[0] },
               {
                 data: this.region[0].map((dataItem, index) => {
                   var cityName = "";
@@ -274,11 +366,11 @@ export default {
           },
           {
             title: {
-              text: "2020-1 长三角区域卡车数量统计图",
+              text: "2020-1 长三角区域城市一体化指标统计图",
               subtext: "浙江大学"
             },
             series: [
-              { data: this.datas[1] },
+              // { data: this.datas[1] },
               {
                 data: this.region[0].map((dataItem, index) => {
                   var cityName = "";
@@ -298,11 +390,11 @@ export default {
           },
           {
             title: {
-              text: "2020-2 长三角区域卡车数量统计图",
+              text: "2020-2 长三角区域城市一体化指标统计图",
               subtext: "浙江大学"
             },
             series: [
-              { data: this.datas[2] },
+              // { data: this.datas[2] },
               {
                 data: this.region[0].map((dataItem, index) => {
                   var cityName = "";
@@ -322,11 +414,11 @@ export default {
           },
           {
             title: {
-              text: "2020-3 长三角区域卡车数量统计图",
+              text: "2020-3 长三角区域城市一体化指标统计图",
               subtext: "浙江大学"
             },
             series: [
-              { data: this.datas[3] },
+              // { data: this.datas[3] },
               {
                 // data: this.truck[3].rows.map((dataItem, index) => {
                 //   var sum = 0;
@@ -359,14 +451,54 @@ export default {
                 })
               }
             ]
+          },
+          {
+            title: {
+              text: "2020-4 长三角区域城市一体化指标统计图",
+              subtext: "浙江大学"
+            },
+            series: [
+              // { data: this.datas[3] },
+              {
+                // data: this.truck[3].rows.map((dataItem, index) => {
+                //   var sum = 0;
+                //   for (var val in dataItem) {
+                //     sum += Number(dataItem[val]);
+                //   }
+                //   //console.log("sum: ", sum);
+                //   return {
+                //     name: this.truck[3].ids[index],
+                //     //dataItem[1].name.concat(":" + [dataItem[1].value]),
+                //     value: geoCoorddata[this.truck[3].ids[index]].concat([
+                //       String(sum)
+                //     ]),
+                //     year: 3
+                //   };
+                // })
+
+                data: this.region[0].map((dataItem, index) => {
+                  var cityName = "";
+                  for (var name in dataItem) {
+                    cityName = name;
+                  }
+                  var regionIndex = dataItem[cityName][4];
+                  return {
+                    name: cityName,
+                    value: geoCoorddata[this.truck[0].ids[index]].concat([
+                      regionIndex
+                    ])
+                  };
+                })
+              }
+            ]
           }
         ]
       };
 
-      this.option.options[0].series[0].data = this.datas[0];
-      this.option.options[1].series[0].data = this.datas[1];
-      this.option.options[2].series[0].data = this.datas[2];
-      this.option.options[3].series[0].data = this.datas[3];
+      // this.option.options[0].series[0].data = this.datas[0];
+      // this.option.options[1].series[0].data = this.datas[1];
+      // this.option.options[2].series[0].data = this.datas[2];
+      // this.option.options[3].series[0].data = this.datas[3];
       let myChart = this.$echarts.init(document.getElementById("map"));
 
       myChart.setOption(this.option);

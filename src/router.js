@@ -11,7 +11,7 @@ export default new Router({
       component: () => import("./views/indexMap.vue")
     },
     {
-      path: "/BMap",
+      path: "/Map",
       name: "bmap",
       component: () => import("./views/BMap.vue")
     }

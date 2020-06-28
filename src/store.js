@@ -5,6 +5,7 @@ import truck_02 from "./data/file_02.json";
 import truck_03 from "./data/file_03.json";
 import truck from "./data/file_2018.json";
 import geoCoordData from "./data/geoCoordData.json";
+import rate from "./data/sum.json";
 import region from "./data/region.json";
 import { Col } from "ant-design-vue";
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     totalMapData: [],
     dataBase: [],
     regionData: [],
+    rateData: [],
     Total_DataBase: [], //****************************** */
     time: { "2018": 0, "2020.1": 1, "2020.2": 2, "2020.3": 3 }, //****************************** */
     Date: 2018,
@@ -69,28 +71,49 @@ export default new Vuex.Store({
               if (Number(row[cname])) {
                 dest = cname;
                 val = row[cname];
-                console.log(val);
-                if (Number(val) >= 100000) {
-                  width = 7;
-                  color = "#9966FF";
-                } else if (Number(val) >= 6000) {
-                  width = 6;
-                  color = "#CC99CC";
-                } else if (Number(val) >= 4000) {
-                  width = 5;
-                  color = "#FF6666";
+                //console.log(val);
+                if (Number(val) >= 20000) {
+                  width = 14;
+                  color = "#9900FF";
+                } else if (Number(val) >= 15000) {
+                  width = 13;
+                  color = "#FF0000";
+                } else if (Number(val) >= 10000) {
+                  width = 12;
+                  color = "#FF3333";
+                } else if (Number(val) >= 8000) {
+                  width = 11;
+                  color = "#990033";
+                } else if (Number(val) >= 5000) {
+                  width = 10;
+                  color = "#CC3366";
                 } else if (Number(val) >= 3000) {
-                  width = 4;
-                  color = "#FF3300";
+                  width = 9;
+                  color = "990066";
                 } else if (Number(val) >= 2000) {
-                  width = 3;
-                  color = "#FF6600";
+                  width = 8;
+                  color = "#993366";
+                } else if (Number(val) >= 1000) {
+                  width = 7;
+                  color = "#999966";
                 } else if (Number(val) >= 600) {
+                  width = 6;
+                  color = "#CC9933";
+                } else if (Number(val) >= 400) {
+                  width = 5;
+                  color = "#9999FF";
+                } else if (Number(val) >= 200) {
+                  width = 4;
+                  color = "#339933";
+                } else if (Number(val) >= 100) {
+                  width = 3;
+                  color = "#33FF00";
+                } else if (Number(val) >= 50) {
                   width = 2;
-                  color = "#FFCC00";
+                  color = "#CCCC66";
                 } else {
                   width = 1;
-                  color = "#99CC33";
+                  color = "#FFFF99";
                 }
 
                 temp.push({
@@ -126,6 +149,7 @@ export default new Vuex.Store({
 
       state.dataBase = data[0];
       state.regionData.push(region);
+      state.rateData.push(rate);
       state.Total_DataBase.push(data[0]); //*********************************************** */
       state.Total_DataBase.push(data[1]);
       state.Total_DataBase.push(data[2]);

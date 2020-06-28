@@ -1,6 +1,12 @@
 <template>
   <div id="truck_map">
     <div id="map"></div>
+    <!-- <el-switch
+      v-model="switch1"
+      active-text="按月付费"
+      inactive-text="按年付费"
+    >
+    </el-switch> -->
     <el-drawer title="详细数据" :visible.sync="drawer" :with-header="false">
       <span>详细数据</span>
       <el-table :data="tableData" height="60%" stripe style="width: 100%">
@@ -29,10 +35,40 @@ export default {
   data() {
     return {
       option: [],
+      switch1: true,
       legend_select: "2018",
       time: { "2018": 0, "2020.1": 1, "2020.2": 2, "2020.3": 3 },
       time_select: 0,
       drawer: false,
+      categoryData: [
+        "上海",
+        "南京",
+        "无锡",
+        "常州",
+        "苏州",
+        "南通",
+        "盐城",
+        "扬州",
+        "镇江",
+        "泰州",
+        "杭州",
+        "宁波",
+        "嘉兴",
+        "湖州",
+        "绍兴",
+        "金华",
+        "舟山",
+        "台州",
+        "合肥",
+        "芜湖",
+        "蚌埠",
+        "马鞍",
+        "铜陵",
+        "安庆",
+        "滁州",
+        "池州",
+        "宣城"
+      ],
       tableData: [
         {
           name1: " ",
@@ -58,53 +94,89 @@ export default {
     //   return state.count + this.localCount
     // }
     truck: state => state.Total_DataBase,
-    datas: state => state.mapData
+    datas: state => state.mapData,
+    region: state => state.rateData
   }),
   methods: {
     ...mapActions(["getAllData", "setData"]),
+    //router
+    switchTo() {
+      this.$router.push("/");
+    },
     options() {
       let geoCoorddata = geoCoordData;
       let citys = [];
       for (let prop in geoCoorddata) {
         citys.push({ name: prop, coord: geoCoorddata[prop] });
       }
+      var region_list_2018 = [];
+      let region_list_20201 = [];
+      let region_list_20202 = [];
+      let region_list_20203 = [];
 
-      //var datas = [];
+      let region_index = [
+        "上海",
+        "南京",
+        "无锡",
+        "常州",
+        "苏州",
+        "南通",
+        "盐城",
+        "扬州",
+        "镇江",
+        "泰州",
+        "杭州",
+        "宁波",
+        "嘉兴",
+        "湖州",
+        "绍兴",
+        "金华",
+        "舟山",
+        "台州",
+        "合肥",
+        "芜湖",
+        "蚌埠",
+        "马鞍",
+        "铜陵",
+        "安庆",
+        "滁州",
+        "池州",
+        "宣城"
+      ];
 
-      // // 注意：foreach只能遍历数组，三个参数位置不能颠倒
-      // // city：citys里面的单条数据
-      // // index：下标
-      // // citys：整个数组
-      // citys.forEach((city, index, citys) => {
-      //   // Math.floor() 向下取整
-      //   // Math.random() 函数返回一个浮点,  伪随机数在范围[0，1)
-      //   let temp = Math.floor(Math.random() * citys.length);
-      //   datas.push({
-      //     name: city.name,
-      //     toname: citys[temp].name,
-      //     coords: [city.coord, citys[temp].coord]
-      //   });
-      // });
+      var i = 0;
+      for (var index in region_index) {
+        var sum = this.region[0][i][region_index[index]][0];
+        region_list_2018.push(sum);
+        if (i % 2 == 0) {
+          region_list_2018.push(-sum);
+        } else {
+          region_list_2018.push(sum);
+        }
+        i = i + 1;
+      }
 
-      // truck.rows.forEach((row, index) => {
-      //   var start = truck.ids[index];
-      //   var dest = "";
-      //   var value = 0;
-      //   for (var cname in row) {
-      //     if (cname == "name") {
-      //       start = row[cname];
-      //     } else if (Number(row[cname])) {
-      //       dest = cname;
-      //       value = row[cname];
-      //       datas.push({
-      //         name: start,
-      //         toname: dest,
-      //         coords: [geoCoorddata[start], geoCoorddata[dest]],
-      //         value: value
-      //       })
-      //     }
-      //   }
-      // });
+      //console.log("Region data:",region_list_2018)
+
+      var i = 0;
+      for (var index in region_index) {
+        region_list_20201.push(this.region[0][i][region_index[index]][1]);
+        i = i + 1;
+      }
+
+      console.log("Region data 2020_01:", region_list_20201);
+
+      var i = 0;
+      for (var index in region_index) {
+        region_list_20202.push(this.region[0][i][region_index[index]][2]);
+        i = i + 1;
+      }
+
+      var i = 0;
+      for (var index in region_index) {
+        region_list_20203.push(this.region[0][i][region_index[index]][3]);
+        i = i + 1;
+      }
 
       let series = []; //在地图上显示的数据
       series.push(
@@ -136,81 +208,6 @@ export default {
             }
           }
         },
-
-        // {
-        //   name: "2020.1",
-        //   type: "lines",
-        //   map: "china",
-        //   coordinateSystem: "bmap",
-        //   zlevel: 1,
-        //   // 线数据集。  从哪个城市to哪个城市
-        //   data: this.datas[1],
-        //   //线上面的动态特效
-        //   effect: {
-        //     show: true, //是否显示特效。
-        //     period: 4, //特效动画的时间，单位为 s。
-        //     trailLength: 0.2, //特效尾迹的长度。取从 0 到 1 的值，数值越大尾迹越长。
-        //     color: "#fff", //射线颜色
-        //     symbolSize: [3, 5] //特效标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示高和宽，例如 [20, 10] 表示标记宽为20，高为10。
-        //   },
-        //   lineStyle: {
-        //     //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式。
-        //     normal: {
-        //       curveness: 0.3 //边的曲度，支持从 0 到 1 的值，值越大曲度越大。
-        //     }
-        //   }
-        // },
-        // {
-        //   name: "2020.2",
-        //   type: "lines",
-        //   map: "china",
-        //   coordinateSystem: "bmap",
-        //   zlevel: 1,
-        //   // 线数据集。  从哪个城市to哪个城市
-        //   data: this.datas[2],
-        //   //线上面的动态特效
-        //   effect: {
-        //     show: true, //是否显示特效。
-        //     period: 4, //特效动画的时间，单位为 s。
-        //     trailLength: 0.2, //特效尾迹的长度。取从 0 到 1 的值，数值越大尾迹越长。
-        //     color: "#fff", //射线颜色
-        //     symbolSize: [3, 5] //特效标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示高和宽，例如 [20, 10] 表示标记宽为20，高为10。
-        //   },
-        //   lineStyle: {
-        //     //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式。
-        //     normal: {
-        //       curveness: 0.3 //边的曲度，支持从 0 到 1 的值，值越大曲度越大。
-        //     }
-        //   }
-        //   //formatter: '{b}'
-        // },
-        // {
-        //   name: "2020.3",
-        //   type: "lines",
-        //   map: "china",
-        //   coordinateSystem: "bmap",
-        //   //所有图形的 zlevel 值。zlevel用于 Canvas 分层，
-        //   // 不同zlevel值的图形会放置在不同的 Canvas 中，Canvas 分层是一种常见的优化手段。我们可以把一些图形变化频繁（例如有动画）的组件设置成一个单独的zlevel。
-        //   // 需要注意的是过多的 Canvas 会引起内存开销的增大，在手机端上需要谨慎使用以防崩溃。zlevel 大的 Canvas 会放在 zlevel 小的 Canvas 的上面。
-        //   zlevel: 1,
-        //   // 线数据集。  从哪个城市to哪个城市
-        //   data: this.datas[3],
-        //   //线上面的动态特效
-        //   effect: {
-        //     show: true, //是否显示特效。
-        //     period: 4, //特效动画的时间，单位为 s。
-        //     trailLength: 0.2, //特效尾迹的长度。取从 0 到 1 的值，数值越大尾迹越长。
-        //     color: "#fff", //射线颜色
-        //     symbolSize: [3, 5] //特效标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示高和宽，例如 [20, 10] 表示标记宽为20，高为10。
-        //   },
-        //   lineStyle: {
-        //     //normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式。
-        //     normal: {
-        //       curveness: 0.3 //边的曲度，支持从 0 到 1 的值，值越大曲度越大。
-        //     }
-        //   }
-        //   //formatter: '{b}'
-        // },
 
         //////////////////////////////////////////////////////////////////////LINES//////////////////////////////////////////////////////
         // {
@@ -245,12 +242,12 @@ export default {
           //散点的尺寸，当数据加载完成之后执行回调，通过返回值来设置大小
           symbolSize: val => {
             val[2] = Number(val[2]);
-            if (val[2] >= 100000) {
-              return val[2] / 50000 + 20;
-            } else if (val[2] >= 5000) {
-              return val[2] / 50000 + 15;
-            } else if (val[2] >= 1000) {
-              return val[2] / 50000 + 10;
+            if (val[2] >= 10000) {
+              return val[2] / 5000 + 20;
+            } else if (val[2] >= 500) {
+              return val[2] / 5000 + 15;
+            } else if (val[2] >= 100) {
+              return val[2] / 5000 + 10;
             } else if (val[2] >= 10) {
               return 10;
             } else {
@@ -267,12 +264,12 @@ export default {
           },
           data: this.truck[this.time_select].rows.map((dataItem, index) => {
             //console.log("bug", geoCoorddata[dataItem[1].name].concat([dataItem[1].value]))
-            console.log("time_select:", this.time_select);
+            //console.log("time_select:", this.time_select);
             var sum = 0;
             for (var val in dataItem) {
               sum += Number(dataItem[val]);
             }
-            console.log("sum: ", sum);
+            //console.log("sum: ", sum);
             return {
               name: this.truck[this.time_select].ids[index],
               //dataItem[1].name.concat(":" + [dataItem[1].value]),
@@ -313,35 +310,191 @@ export default {
               // },
             ]
           },
-          //设置标题文本
-          title: {
-            text: "长三角区域卡车数量统计图",
-            subtext: "浙江大学",
-            sublink: "https://www.zju.edu.cn",
-            left: "center",
-            top: 5,
-            itemGap: 0,
-            textStyle: {
-              color: "#000000",
-              stringnumber: "bold",
-              fontSize: 30
-            },
-            subtextStyle: {
-              fontSize: 20
-            },
-            //textAlign: "right",
-            z: 200
+          animation: true,
+          animationDuration: 1000,
+          animationEasing: "cubicInOut",
+          animationDurationUpdate: 1000,
+          animationEasingUpdate: "cubicInOut",
+          // 百分比数据现实
+          grid: {
+            right: "1%",
+            top: "15%",
+            bottom: "200px",
+            width: "130px"
           },
+          xAxis: {
+            type: "value",
+            scale: true,
+            splitNumber: 3,
+            position: "top",
+            //min: -1,
+            boundaryGap: false,
+            splitLine: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              margin: 10,
+              textStyle: {
+                color: "#aaa"
+              }
+            }
+          },
+          yAxis: {
+            type: "category",
+            //  name: 'TOP 20',
+            nameGap: 16,
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: "#000"
+              }
+            },
+            axisTick: {
+              show: false,
+              lineStyle: {
+                color: "#000"
+              }
+            },
+            axisLabel: {
+              interval: 0,
+              textStyle: {
+                color: "#000"
+              }
+            },
+            data: this.categoryData
+          },
+          //切换开关
+          graphic: [
+            {
+              type: "group",
+              bounding: "raw",
+              left: 60,
+              top: 450,
+              z: 100,
+              // onclick: (e, a, b, c) => {
+              //   console.log("debug", e, a, b, c);
+              //   e.target.style.fill = "#ff00ff";
+              // },
+              children: [
+                {
+                  type: "rect",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  shape: {
+                    width: 114,
+                    height: 32,
+                    r: 3
+                  },
+                  style: {
+                    fill: "#66b1ff",
+                    stroke: "#66b1ff",
+                    lineWidth: 0.5
+                  }
+                },
+                {
+                  type: "text",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  style: {
+                    fill: "#fff",
+                    lineWidth: 0.5,
+                    text: "卡车数量统计"
+                  }
+                }
+              ]
+            },
+            {
+              type: "group",
+              bounding: "raw",
+              left: 60,
+              top: 400,
+              z: 100,
+              onclick: (e, a, b, c) => {
+                console.log("debug");
+                this.switchTo();
+              },
+              children: [
+                {
+                  type: "rect",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  shape: {
+                    width: 114,
+                    height: 32,
+                    r: 3
+                  },
+                  style: {
+                    fill: "#fff",
+                    stroke: "#66b1ff",
+                    lineWidth: 0.5
+                  }
+                },
+                {
+                  type: "text",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  style: {
+                    fill: "#606266",
+                    lineWidth: 0.5,
+                    text: "一体化指标统计"
+                  }
+                }
+              ]
+            }
+          ],
+          //设置标题文本
+          title: [
+            {
+              text: "长三角区域卡车数量统计图",
+              subtext: "浙江大学",
+              sublink: "https://www.zju.edu.cn",
+              left: "center",
+              top: 5,
+              itemGap: 0,
+              textStyle: {
+                color: "#000000",
+                stringnumber: "bold",
+                fontSize: 30
+              },
+              subtextStyle: {
+                fontSize: 20
+              },
+              //textAlign: "right",
+              z: 200
+            },
+            {
+              id: "statistic",
+              text: "环比增长统计表",
+              right: "10px",
+              top: "8%",
+              textStyle: {
+                color: "#000000",
+                fontSize: 20
+              }
+            }
+          ],
           bmap: {
-            center: [118.765995, 30.945765],
+            center: [119.165995, 30.945765],
             zoom: 9,
             roam: true,
             mapStyle: MapStyle,
+            height: 100,
             left: "6%",
             top: 40,
             bottom: "54%",
             right: "14%"
           },
+
           tooltip: {
             show: true, //是否显示提示框组件，包括提示框浮层和 axisPointer。
             trigger: "item", //触发类型。
@@ -352,6 +505,12 @@ export default {
                 return params.name.concat(
                   "->" + params.data.toname + ": " + params.value
                 );
+              } else if (params.componentType == "timeline") {
+                if (params.name == "2018") {
+                  return params.name.concat("月平均数据");
+                } else {
+                  return params.name;
+                }
               } else {
                 return params.name.concat(":" + params.value[2]);
               }
@@ -359,23 +518,10 @@ export default {
             padding: [5, 10],
             transitionDuration: 0.2
           },
-          // brush: {
-          //   geoIndex: "all",
-          //   brushLink: "all",
-          //   inBrush: {
-          //     opacity: 1,
-          //     symbolSize: 14
-          //   },
-          //   outOfBrush: {
-          //     color: "#000",
-          //     opacity: 0.2
-          //   },
-          //   z: 10
-          // },
           visualMap: [
             {
               min: 0,
-              max: 2500000,
+              max: 250000,
               splitNumber: 5,
               //top: "middle",
               left: "right",
@@ -389,29 +535,38 @@ export default {
             },
             {
               pieces: [
-                { min: 200000 }, // 不指定 max，表示 max 为无限大（Infinity）。
-                { min: 50000, max: 200000 },
-                { min: 30000, max: 50000 },
-                { min: 10000, max: 30000 },
-                { min: 6000, max: 10000 },
-                { min: 4000, max: 6000 },
-                { min: 2000, max: 4000 },
-                { min: 1000, max: 2000 },
+                { min: 20000 }, // 不指定 max，表示 max 为无限大（Infinity）。
+                { min: 15000, max: 20000 },
+                { min: 10000, max: 15000 },
+                { min: 5000, max: 10000 },
+                { min: 5000, max: 8000 },
+                { min: 3000, max: 5000 },
+                { min: 2000, max: 3000 },
+                {min:  1000, max:  2000},
+                { min: 600, max: 1000 },
+                { min: 400, max: 600 },
+                { min: 200, max: 400 },
+                { min: 100, max: 200 },
 
-                { max: 1000 } // 不指定 min，表示 min 为无限大（-Infinity）。
+                { max: 50 } // 不指定 min，表示 min 为无限大（-Infinity）。
               ],
               top: "top",
               left: "left",
               color: [
-                "#9900CC",
-                "#9966FF",
+                "#9900FF",
+                "#FF0000",
+                "#FF3333",
+                "#990033",
+                "#CC3366",
+                "#990066",
+                "#993366",
+                "#999966",
+                "#CC9933",
                 "#9999FF",
-                "#FFCC99",
-                "#CC6699",
-                "#FF9999",
-                "#FFFF99",
-                "#009900",
-                "#CCFF99"
+                "#339933",
+                "#33FF00",
+                "#CCCC66",
+                "#FFFF99"
               ],
               textStyle: {
                 //color: "#d94e5d"
@@ -434,10 +589,6 @@ export default {
           //   selectedMode: "single"
           // },
           calculable: true,
-          grid: {
-            top: 80,
-            bottom: 100
-          },
           series: series
         },
         options: [
@@ -454,7 +605,7 @@ export default {
                   for (var val in dataItem) {
                     sum += Number(dataItem[val]);
                   }
-                  console.log("sum: ", sum);
+                  // console.log("sum: ", sum);
                   return {
                     name: this.truck[0].ids[index],
                     //dataItem[1].name.concat(":" + [dataItem[1].value]),
@@ -464,6 +615,20 @@ export default {
                     year: 0
                   };
                 })
+              },
+
+              {
+                min: -1,
+                max: 1,
+                zlevel: 1.5,
+                type: "bar",
+                symbol: "none",
+                itemStyle: {
+                  normal: {
+                    color: "#9999FF"
+                  }
+                },
+                data: region_list_2018
               }
             ]
           },
@@ -480,7 +645,7 @@ export default {
                   for (var val in dataItem) {
                     sum += Number(dataItem[val]);
                   }
-                  console.log("sum: ", sum);
+                  //console.log("sum: ", sum);
                   return {
                     name: this.truck[1].ids[index],
                     //dataItem[1].name.concat(":" + [dataItem[1].value]),
@@ -490,6 +655,19 @@ export default {
                     year: 1
                   };
                 })
+              },
+              {
+                min: -1,
+                max: 1,
+                zlevel: 1.5,
+                type: "bar",
+                symbol: "none",
+                itemStyle: {
+                  normal: {
+                    color: "#9999FF"
+                  }
+                },
+                data: region_list_20201
               }
             ]
           },
@@ -506,7 +684,7 @@ export default {
                   for (var val in dataItem) {
                     sum += Number(dataItem[val]);
                   }
-                  console.log("sum: ", sum);
+                  //console.log("sum: ", sum);
                   return {
                     name: this.truck[2].ids[index],
                     //dataItem[1].name.concat(":" + [dataItem[1].value]),
@@ -516,6 +694,18 @@ export default {
                     year: 2
                   };
                 })
+              },
+
+              {
+                zlevel: 1.5,
+                type: "bar",
+                symbol: "none",
+                itemStyle: {
+                  normal: {
+                    color: "#9999FF"
+                  }
+                },
+                data: region_list_20202
               }
             ]
           },
@@ -532,7 +722,7 @@ export default {
                   for (var val in dataItem) {
                     sum += Number(dataItem[val]);
                   }
-                  console.log("sum: ", sum);
+                  //console.log("sum: ", sum);
                   return {
                     name: this.truck[3].ids[index],
                     //dataItem[1].name.concat(":" + [dataItem[1].value]),
@@ -542,6 +732,18 @@ export default {
                     year: 3
                   };
                 })
+              },
+
+              {
+                zlevel: 1.5,
+                type: "bar",
+                symbol: "none",
+                itemStyle: {
+                  normal: {
+                    color: "#9999FF"
+                  }
+                },
+                data: region_list_20203
               }
             ]
           }
@@ -565,12 +767,13 @@ export default {
       // bdMap.disableDoubleClickZoom();
       console.log("BMAP", bdMap.getZoom());
       console.log("center:", bdMap.getCenter());
+      //console.log("Region data:",this.region[0][0]['上海'][0]
 
       //获取地图实例 配置地图
 
       //添加鼠标点击动作
       myChart.on("click", { seriesName: "pos" }, params => {
-        console.log("name", params.name);
+        //console.log("name", params.name);
         //调用action过滤数据
         this.setData([this.time_select, String(params.name)]);
         this.option.options[0].series[0].data = this.datas[0];
@@ -587,40 +790,9 @@ export default {
         myChart.setOption(this.option);
       });
 
-      // //切换时间
-      // myChart.on("legendselectchanged", params => {
-      //   this.legend_select = params.name;
-      //   // console.log("time_select:",this.time);
-      //   this.time_select = this.time[this.legend_select];
-      //   this.option.baseOption.series[0].data = this.truck[
-      //     this.time_select
-      //   ].rows.map((dataItem, index) => {
-      //     //console.log("bug", geoCoorddata[dataItem[1].name].concat([dataItem[1].value]))
-      //     console.log("time_select:", this.time_select);
-      //     var sum = 0;
-      //     for (var val in dataItem) {
-      //       sum += Number(dataItem[val]);
-      //     }
-      //     console.log("sum: ", sum);
-      //     return {
-      //       name: this.truck[this.time_select].ids[index],
-      //       //dataItem[1].name.concat(":" + [dataItem[1].value]),
-      //       value: geoCoorddata[this.truck[this.time_select].ids[index]].concat(
-      //         [String(sum)]
-      //       )
-      //     };
-      //   });
-      //   this.option.baseOption.bmap.center = [
-      //     bdMap.getCenter().lng,
-      //     bdMap.getCenter().lat
-      //   ];
-      //   this.option.baseOption.bmap.zoom = bdMap.getZoom();
-      //   myChart.setOption(this.option);
-      // });
-
       //鼠标右键回调
       myChart.on("contextmenu", { seriesName: "pos" }, params => {
-        console.log("name", params.data.year);
+        //console.log("name", params.data.year);
         this.drawer = true;
         //获取城市id
         var id = 0;
@@ -673,5 +845,8 @@ export default {
 #map {
   width: 100%;
   height: 100vh;
+  .ec-extension-bmap {
+    height: 50%;
+  }
 }
 </style>
