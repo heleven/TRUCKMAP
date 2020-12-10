@@ -510,7 +510,7 @@ export default {
               pieces: [
                 { min: 1.5 }, // 不指定 max，表示 max 为无限大（Infinity）。
                 { min: 1.2, max: 1.5 },
-                { min: 1.0, max: 1.2},
+                { min: 1.0, max: 1.2 },
                 { min: 0.95, max: 1.0 },
                 { min: 0.9, max: 0.95 },
                 { min: 0.85, max: 0.9 },
@@ -535,7 +535,7 @@ export default {
                 "#EEF364",
                 "#ACF186",
                 "#519DBA",
-                
+
                 "#18D9DB",
                 "#51BAB5",
                 "#256284",
@@ -570,7 +570,8 @@ export default {
       };
       // 利用循环语句设定各个星期的地图信息
       for (var n = 0; n < date.length; n++) {
-        var title_name = "2020" + date[n] + " 长三角区域城市间物流一体化指标统计图";
+        var title_name =
+          "2020" + date[n] + " 长三角区域城市间物流一体化指标统计图";
         this.option.options.push({
           title: {
             text: title_name,

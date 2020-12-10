@@ -11,13 +11,13 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
-
 importScripts(
-  "precache-manifest.9a46496f0234dc97eae7db062fcac1b5.js"
+  "https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js"
 );
 
-workbox.core.setCacheNameDetails({prefix: "vddos"});
+importScripts("precache-manifest.9a46496f0234dc97eae7db062fcac1b5.js");
+
+workbox.core.setCacheNameDetails({ prefix: "vddos" });
 
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to
