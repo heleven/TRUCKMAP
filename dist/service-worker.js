@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.7f41ceb214152b5ea823d27aeb294b09.js"
+  "precache-manifest.9a46496f0234dc97eae7db062fcac1b5.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "vddos"});

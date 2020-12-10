@@ -14,6 +14,11 @@ export default new Router({
       path: "/Map",
       name: "bmap",
       component: () => import("./views/BMap.vue")
+    },
+    {
+      path: "/BiIndex",
+      name: "bmap",
+      component: () => import("./views/BiIndexMap.vue")
     }
   ]
 });

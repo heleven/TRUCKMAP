@@ -9,7 +9,7 @@
     </el-switch> -->
     <el-drawer title="详细数据" :visible.sync="drawer" :with-header="false">
       <span>详细数据</span>
-      <el-table :data="tableData" height="60%" stripe style="width: 100%">
+      <el-table :data="tableData" height="95%" stripe style="width: 100%">
         <el-table-column prop="name1" label="城市1" width="180">
         </el-table-column>
         <el-table-column prop="name2" label="城市2" width="180">
@@ -100,8 +100,12 @@ export default {
   methods: {
     ...mapActions(["getAllData", "setData"]),
     //router
-    switchTo() {
-      this.$router.push("/");
+    switchTo(selection) {
+      if (selection == 1) {
+        this.$router.push("/");
+      } else {
+        this.$router.push("/BiIndex");
+      }
     },
     options() {
       let geoCoorddata = geoCoordData;
@@ -419,7 +423,7 @@ export default {
               z: 100,
               onclick: (e, a, b, c) => {
                 console.log("debug");
-                this.switchTo();
+                this.switchTo(1);
               },
               children: [
                 {
@@ -447,6 +451,46 @@ export default {
                     fill: "#606266",
                     lineWidth: 0.5,
                     text: "一体化指标统计"
+                  }
+                }
+              ]
+            },
+            {
+              type: "group",
+              bounding: "raw",
+              left: 60,
+              top: 350,
+              z: 100,
+              onclick: (e, a, b, c) => {
+                console.log("debug");
+                this.switchTo(2);
+              },
+              children: [
+                {
+                  type: "rect",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  shape: {
+                    width: 114,
+                    height: 32,
+                    r: 3
+                  },
+                  style: {
+                    fill: "#fff",
+                    stroke: "#66b1ff",
+                    lineWidth: 0.5
+                  }
+                },
+                {
+                  type: "text",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  style: {
+                    fill: "#606266",
+                    lineWidth: 0.5,
+                    text: "城间一体化指标统计"
                   }
                 }
               ]
@@ -792,10 +836,9 @@ export default {
 
       //鼠标右键回调
       myChart.on("contextmenu", { seriesName: "pos" }, params => {
-        //console.log("name", params.data.year);
+        console.log("name", params.data.year);
         this.drawer = true;
         //获取城市id
-        var id = 0;
         let time_select = params.data.year;
         for (var i in this.truck[time_select].ids) {
           //******************************** */
@@ -803,7 +846,6 @@ export default {
             //****************************** */
             break;
           }
-          id++;
         }
         //取出相关数据
         var start = this.truck[time_select].ids[i]; //****************************** */

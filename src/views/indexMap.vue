@@ -63,8 +63,12 @@ export default {
   }),
   methods: {
     ...mapActions(["getAllData", "setData"]),
-    switchTo() {
-      this.$router.push("/Map");
+    switchTo(selection) {
+      if (selection == 1) {
+        this.$router.push("/Map");
+      } else {
+        this.$router.push("/BiIndex");
+      }
     },
     options() {
       let geoCoorddata = geoCoordData;
@@ -180,8 +184,8 @@ export default {
               top: 450,
               z: 100,
               onclick: (e, a, b, c) => {
-                console.log("CLICK");
-                this.switchTo();
+                console.log("debug");
+                this.switchTo(1);
               },
               children: [
                 {
@@ -189,10 +193,6 @@ export default {
                   left: "center",
                   top: "center",
                   z: 100,
-                  onclick: (e, a, b, c) => {
-                    console.log("debug");
-                    this.switchTo();
-                  },
                   shape: {
                     width: 114,
                     height: 32,
@@ -249,6 +249,46 @@ export default {
                     fill: "#fff",
                     lineWidth: 0.5,
                     text: "一体化指标统计"
+                  }
+                }
+              ]
+            },
+            {
+              type: "group",
+              bounding: "raw",
+              left: 60,
+              top: 350,
+              z: 100,
+              onclick: (e, a, b, c) => {
+                console.log("debug");
+                this.switchTo(2);
+              },
+              children: [
+                {
+                  type: "rect",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  shape: {
+                    width: 114,
+                    height: 32,
+                    r: 3
+                  },
+                  style: {
+                    fill: "#fff",
+                    stroke: "#66b1ff",
+                    lineWidth: 0.5
+                  }
+                },
+                {
+                  type: "text",
+                  left: "center",
+                  top: "center",
+                  z: 100,
+                  style: {
+                    fill: "#606266",
+                    lineWidth: 0.5,
+                    text: "城间一体化指标统计"
                   }
                 }
               ]
@@ -512,53 +552,6 @@ export default {
       // bdMap.disableDoubleClickZoom();
       console.log("BMAP", bdMap.getZoom());
       console.log("center:", bdMap.getCenter());
-
-      //鼠标右键回调
-      myChart.on("contextmenu", { seriesName: "pos" }, params => {
-        console.log("name", params.data.year);
-        this.drawer = true;
-        //获取城市id
-        var id = 0;
-        let time_select = params.data.year;
-        for (var i in this.truck[time_select].ids) {
-          //******************************** */
-          if (this.truck[time_select].ids[i] == String(params.name)) {
-            //****************************** */
-            break;
-          }
-          id++;
-        }
-        //取出相关数据
-        var start = this.truck[time_select].ids[i]; //****************************** */
-        //let row = state.dataBase.rows[i];
-        let row = this.truck[time_select].rows[i]; //****************************** */
-        var temp = [];
-        var dest = "";
-        var value = 0;
-        for (var cname in row) {
-          if (Number(row[cname])) {
-            dest = cname;
-            value = row[cname];
-            temp.push({
-              name1: start,
-              name2: dest,
-              no: value
-            });
-          }
-        }
-        console.log("temp: ", temp);
-        this.tableData = temp;
-
-        // 调用百度地图api，记录当前地图信息
-        // 关闭自动播放
-        this.option.baseOption.timeline.autoPlay = false;
-        this.option.baseOption.bmap.center = [
-          bdMap.getCenter().lng,
-          bdMap.getCenter().lat
-        ];
-        this.option.baseOption.bmap.zoom = bdMap.getZoom();
-        myChart.setOption(this.option);
-      });
     }
   }
 };
